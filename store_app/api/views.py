@@ -3,5 +3,5 @@ from django.http import JsonResponse
 
 
 def index(request):
-    return HttpResponse("Hello, world!")
+    return render(request,'store_app/hello.html')
 
