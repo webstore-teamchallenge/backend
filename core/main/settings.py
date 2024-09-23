@@ -11,19 +11,27 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent # type: ignore
 
 APP_DIR = ROOT_DIR / "core_apps"
-
+SITE_ID=1
 
 
 THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
     'drf_yasg',
-    'django_celery_beat',]
+    'django_celery_beat',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'crispy_forms'
+    # 'allauth.socialaccount.providers.facebook',
+]
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -32,10 +40,11 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    'django.contrib.sites',
 ]
 
 LOCAL_APPS = [
-
 ]
 
 INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS + DJANGO_APPS
@@ -49,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -64,6 +75,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -114,6 +127,11 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 # Celery
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
@@ -157,3 +175,43 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    },
+    # 'facebook': {
+    #     'METHOD': 'oauth2',  # Set to 'js_sdk' to use the Facebook connect SDK
+    #     # 'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
+    #     'SCOPE': ['email', 'public_profile'],
+    #     'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+    #     'INIT_PARAMS': {'cookie': True},
+    #     'FIELDS': [
+    #         'id',
+    #         'first_name',
+    #         'last_name',
+    #         'middle_name',
+    #         'name',
+    #         'name_format',
+    #         'picture',
+    #         'short_name'
+    #     ],
+    #     'EXCHANGE_TOKEN': True,
+    #     # 'LOCALE_FUNC': 'path.to.callable',
+    #     'VERIFIED_EMAIL': False,
+    #     'VERSION': 'v13.0',
+    #     'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
+    # }
+}
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# LOGIN_REDIRECT_URL = '/'
+# ACCOUNT_LOGOUT_REDIRECT_URL = '/'
