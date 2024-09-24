@@ -11,7 +11,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '.vercel.app']
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent # type: ignore
 
