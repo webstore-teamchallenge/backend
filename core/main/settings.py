@@ -1,6 +1,7 @@
 from pathlib import Path
 import environ
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -83,6 +84,7 @@ DATABASES = {
         'PORT': env('POSTGRES_PORT'),
     },
 }
+DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 
 AUTH_PASSWORD_VALIDATORS = [
