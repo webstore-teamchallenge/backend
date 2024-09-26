@@ -13,4 +13,4 @@ COPY . /code/
 # RUN chmod +x /code/Docker/local/entrypoint.sh
 
 
-# ENTRYPOINT ["/code/Docker/local/entrypoint.sh"]
+ENTRYPOINT ['gunicorn', 'core.main.wsgi']
